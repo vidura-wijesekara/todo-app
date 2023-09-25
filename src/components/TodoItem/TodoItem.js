@@ -1,18 +1,14 @@
 // TodoItem.js
 import React, { useState } from "react";
-import { useTodoContext } from "../../TodoContext";
-import Checkbox from "@mui/material/Checkbox";
+import { useTodoContext } from "../../services/TodoProvider";
 import Radio from "@mui/material/Radio";
 import { Grid, IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Typography from "@mui/material/Typography";
-import axios from "axios";
+import { deleteData, updateData } from "../../services/TodoFunctions";
 
 const TodoItem = ({ todo }) => {
   const [isDeleted, setIsDeleted] = useState(false);
-  const headers = {
-    Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
-  };
   const { dispatch } = useTodoContext();
   const [completed, setCompleted] = React.useState(todo.completed);
 
@@ -21,28 +17,18 @@ const TodoItem = ({ todo }) => {
     updateTodo(todo._uuid, event);
   };
 
-  const removeTodo = async (id) => {
+  const removeTodo = (id) => {
     setIsDeleted(true);
     try {
-      await axios.delete(`/api/v1/task/${id}`, { headers });
-      dispatch({ type: "REMOVE_TODO", payload: id });
+      deleteData(id, dispatch);
     } catch (error) {
       console.error("Error deleting todo", error);
     }
   };
 
-  const updateTodo = async (id, event) => {
+  const updateTodo = (id, event) => {
     try {
-      await axios.put(
-        `/api/v1/task/${id}`,
-        { completed: event.target.checked },
-        { headers }
-      );
-      console.log(event.target.checked);
-      dispatch({
-        type: "UPDATE_TODO",
-        payload: { id: id, completed: event.target.checked },
-      });
+      updateData(id, event, dispatch);
     } catch (error) {
       console.error("Error updating todo", error);
     }
