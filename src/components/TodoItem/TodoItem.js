@@ -10,7 +10,7 @@ import { deleteData, updateData } from "../../services/TodoFunctions";
 const TodoItem = ({ todo }) => {
   const [isDeleted, setIsDeleted] = useState(false);
   const { dispatch } = useTodoContext();
-  const [completed, setCompleted] = React.useState(todo.completed);
+  const [completed, setCompleted] = useState(todo.completed);
 
   const handleChange = (event) => {
     setCompleted(event.target.checked);

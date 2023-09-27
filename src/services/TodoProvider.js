@@ -12,21 +12,6 @@ const initialState = {
 const TodoProvider = ({ children }) => {
   const [state, dispatch] = useReducer(todoReducer, initialState);
 
-  const getData = () => {
-    try {
-      fetchData(dispatch);
-    } catch (error) {
-      console.error("Error fetching data", error);
-      console.log(error);
-      alert(`Error has occurred!`);
-    }
-  };
-
-  useEffect(() => {
-    console.log("fetching in action");
-    getData();
-  }, []);
-
   return (
     <TodoContext.Provider value={{ state, dispatch }}>
       {children}
